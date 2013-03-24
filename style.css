@@ -13,8 +13,7 @@ html, body {
 #drop-area ol {
 	font-size: 24px;
 	font-family: Tahoma;
-	color: lightgrey;
-	text-shadow : 0px -1px 0 rgb(170, 160, 160);
+	color: rgb(161, 196, 196);
 	line-height: 64px;
 	margin-left : 42px;
 }
