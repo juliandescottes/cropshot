@@ -15,6 +15,15 @@
 			border:1px dashed grey 
 		}
 
+		#drop-area ol {
+			font-size: 24px;
+			font-family: Tahoma;
+			color: lightgrey;
+			text-shadow : 0px -1px 0 rgb(170, 160, 160);
+			line-height: 64px;
+			margin-left : 42px;
+		}
+
 		#cropshot-preview {
 			display : none;
 			position: fixed;
@@ -43,7 +52,14 @@
 </head>
 <body>
 	<div id="cropshot-preview"></div>
-	<div id="drop-area"></div>
+	<div id="drop-area">
+		<ol>
+			<li>Copy an image</li>
+			<li>Paste it here</li>
+			<li>Click and drag to select the area to crop</li>
+			<li>Your cropshot is uploaded, get the url or copy the crop directly. That's it</li>
+		</ol>
+	</div>
 	<script type="text/javascript">
 		(function () {
 			var dropArea = document.getElementById("drop-area");
@@ -189,7 +205,6 @@
 				try {
 					// crop canvas
 					canvas = cropCanvas(canvas, cropData);
-					// return callback({responseText : null, error : "save unplugged"});
 					var xhr = new XMLHttpRequest(),
 						formData = new FormData();
 					formData.append('data', getImageDataFromCanvas(canvas));
