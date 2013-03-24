@@ -88,10 +88,19 @@
 				return fixedData;
 			};
 
+			var getBlobFromClipboard = function (clipboardData) {
+				var items = clipboardData.items;
+				for (var i = 0 ; i < items.length ;i++) {
+					if (/^image/i.test(items[i].type)) {
+						return items[i].getAsFile();
+					}
+				}
+				return false;
+			}
+
 			var onPasteEvent = function (event) {
-				var items = event.clipboardData.items;
-				if (/^image/i.test(items[0].type)) {
-					var blob = items[0].getAsFile();
+				var blob = getBlobFromClipboard(event.clipboardData);
+				if (blob) {
 					loadBlob(blob, function (result) {
 						_canvas = createCanvasFromDataUrl(result);
 						_canvas.addEventListener("mousedown", startCropping);
@@ -99,8 +108,8 @@
 						dropArea.appendChild(_canvas);
 					})
 				} else {
-					console.log("Your clipboard doesn't contain an image :(")
-				}
+					console.log("Your clipboard doesn't contain an image :(");
+				}				
 			};
 
 			var startCropping = function (event) {
@@ -176,5 +185,5 @@
 
 			window.addEventListener("mouseup", stopCropping);
 			window.addEventListener("mousemove", onMouseMove);
-			document.body.addEventListener("paste", onPasteEvent);
+			window.addEventListener("paste", onPasteEvent);
 		})();
