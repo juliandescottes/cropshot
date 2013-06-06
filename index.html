@@ -6,7 +6,18 @@
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-	<div id="cropshot-preview"></div>
+	<div id="cropshot-preview-container"></div>
+	<script type="template" id="cropshot-preview-template">
+		<div class="mask"></div>
+		<div class="cropshot-preview">
+			<div class="cropshot-preview-line cropshot-preview-title">Your cropshot has been successfully saved !</div>
+			<img class="cropshot-preview-image cropshot-preview-line" src='{{src}}'/>
+	        <a class="cropshot-preview-line" href='{{src}}'>{{src}}</a>
+	        <div class="cropshot-preview-button" onclick="dismissPreview()">Close</div>
+		</div>
+	</script>
+	<div id="drop-container">
+	</div>
 	<div id="drop-area" class="unselectable">
 		<ol>
 			<li>Copy an image</li>

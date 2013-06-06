@@ -26,27 +26,79 @@ html, body {
 	margin-left : 42px;
 }
 
-#cropshot-preview {
-	display : none;
-	position: fixed;
-	top : 50px;
-	left : 50px;
-	border : 10px solid white;
-	box-shadow : 0 0 5px black;
-	z-index: 10;
-	font-size: 12px;
-	font-family: Arial;
-	background: white;
+.mask {
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    z-index:9999;
+    background-color : rgba(0,0,0,0.4)
 }
 
-#cropshot-preview img {
+.cropshot-preview {
+	position: fixed;
+	
+	top: 50%;
+	left: 50%;
+	margin-left: -250px;
+	margin-top: -175px;
+
+	width: 500px;
+	max-height: 350px;
+	padding: 10px;
+
+	font-size: 12px;
+	font-family: Arial;
+
+	box-shadow: 0 0 5px black;
+	background: white;
+
+	z-index: 10000;
+}
+
+.cropshot-preview-image {
+	max-width : 500px;
+	max-height : 240px;
 	border : 1px solid lightgrey;
 }
 
-#cropshot-preview div {
-	margin : 0 0 10px 0;
+.cropshot-preview-title {
+	font-weight: bold;
+	font-size: 14pt;
 }
 
-#cropshot-preview.show {
+.cropshot-preview-line {
+	display: block;
+	margin-bottom : 10px;
+}
+
+.cropshot-preview-button {
+	height: 30px;
+	line-height: 30px;
+	width: 80px;
+	float:right;
+
+	border: 1px solid rgb(100,100,100);
+	border-radius: 1px;
+
+	text-align: center;
+	font-size: 11pt;
+	color: white;
+	text-shadow: 0 -1px 0 rgb(100,100,100);
+
+	background-color: grey;
+	cursor: pointer;
+}
+
+.cropshot-preview-button:hover {
+	background-color: rgb(140,140,140);
+}
+
+#cropshot-preview-container {
+	display : none;
+}
+
+#cropshot-preview-container.show {
 	display : block;
 }

@@ -1,12 +1,26 @@
 (function () {
 	var dropArea = document.getElementById("drop-area");
-	var preview = document.getElementById("cropshot-preview");
+	var previewContainer = document.getElementById("cropshot-preview-container");
 	var _canvas = null, _isCropping = false, _selectionRectangle = null, _cropData = null;
+
+	var __templates = {};
+	var __getTemplate = function (id) {
+		if (__templates[id]) {
+			return __templates[id];	
+		} else {
+			var el = document.getElementById(id+"-template");
+			if (el) {
+				return __templates[id] = el.innerHTML
+			} else {
+				throw new Error("Couldn't retrieve template for " + id);
+			}
+		}
+	};
 
 	var cropCanvas = function (sourceCanvas, cropData) {
 		var fixedData = fixRectData(cropData);
-		var x1 = fixedData.x1, x2 = fixedData.x2, 
-			y1 = fixedData.y1, y2 = fixedData.y2,
+		var x1 = fixedData.x1, x2 = fixedData.x2+4, 
+			y1 = fixedData.y1, y2 = fixedData.y2+4,
 	    	width = x2 - x1, height = y2 - y1;
 
 		var canvas = document.createElement("canvas");
@@ -59,14 +73,16 @@
 
 	var initializeCropData = function (event) {
 		var x = event.clientX, y = event.clientY;
+		x = Math.min(Math.max(20, x), 17 + Math.min(dropArea.offsetWidth, _canvas.width));
+		y = Math.min(Math.max(20, y), 17 + Math.min(dropArea.offsetHeight, _canvas.height));
 		_cropData = {};
 		_cropData.x1 = _cropData.x2 = x, _cropData.y1 = _cropData.y2 = y;
 	}
 
 	var updateCropData = function (event) {
 		var x = event.clientX, y = event.clientY;
-		x = Math.min(Math.max(21, x), 15 + Math.min(dropArea.offsetWidth, _canvas.width));
-		y = Math.min(Math.max(21, y), 15 + Math.min(dropArea.offsetHeight, _canvas.height));
+		x = Math.min(Math.max(21, x), 17 + Math.min(dropArea.offsetWidth, _canvas.width));
+		y = Math.min(Math.max(21, y), 17 + Math.min(dropArea.offsetHeight, _canvas.height));
 		_cropData.x2 = x, _cropData.y2 = y;
 	};
 
@@ -78,12 +94,12 @@
 		_selectionRectangle.style.width = fixedData.x2 - fixedData.x1 + "px";
 	};
 
-	var fixRectData = function (rectData) {
+	var fixRectData = function (rect) {
 		var fixedData = {
-			x1 : Math.min(rectData.x1, rectData.x2),
-			x2 : Math.max(rectData.x1, rectData.x2),
-			y1 : Math.min(rectData.y1, rectData.y2),
-			y2 : Math.max(rectData.y1, rectData.y2),
+			x1 : Math.min(rect.x1, rect.x2),
+			x2 : Math.max(rect.x1, rect.x2),
+			y1 : Math.min(rect.y1, rect.y2),
+			y2 : Math.max(rect.y1, rect.y2),
 		};
 		return fixedData;
 	};
@@ -103,20 +119,12 @@
 		if (blob) {
 			loadBlob(blob, function (result) {
 				_canvas = createCanvasFromDataUrl(result);
-				_canvas.addEventListener("mousedown", startCropping);
 				dropArea.innerHTML = "";
 				dropArea.appendChild(_canvas);
 			})
 		} else {
 			console.log("Your clipboard doesn't contain an image :(");
 		}				
-	};
-
-	var startCropping = function (event) {
-		_isCropping = true;
-		_selectionRectangle = createSelectionRectangle();
-		initializeCropData(event);
-		updateSelectionFromCropData(_selectionRectangle, _cropData);	
 	};
 
 	var onMouseMove = function (event) {
@@ -126,15 +134,16 @@
 		}
 	};
 
-	window.dismissPreview = function () {
-		preview.classList.remove("show");
+	var dismissPreview = function () {
+		previewContainer.classList.remove("show");
+		previewContainer.innerHTML = "";
 	};
 
 	var onSaveCompleted = function (result) {
 		if (!result.error) {
 			var src = SERVICE_URL + "img/" + result.responseText;
-			preview.innerHTML = "<div>Image saved at : <a href='"+src+"'>"+ src + "</a> (<a href='#' onclick='dismissPreview()'>dismiss</a>)</div><img src='"+src+"'>";
-			preview.classList.add("show");
+			previewContainer.innerHTML = __getTemplate("cropshot-preview").replace(/{{src}}/g, src);
+			previewContainer.classList.add("show");
 		} else {
 			console.log("Couldn't save image : " + result.error);
 		}
@@ -171,6 +180,23 @@
 		return absoluteData;
 	};
 
+	var startCropping = function (event) {
+		if (!isAncestor(previewContainer, event.target)) {
+			if (_canvas !== null) {
+				_isCropping = true;
+				_selectionRectangle = createSelectionRectangle();
+				initializeCropData(event);
+				updateSelectionFromCropData(_selectionRectangle, _cropData);	
+			}
+		}
+	};
+
+	var isAncestor = function (element, child) {
+		var ancestor = child;
+		while (ancestor && (ancestor != element) && (ancestor = ancestor.parentNode)) {}
+		return ancestor == element;
+	}
+
 	var stopCropping = function (event) {
 		if(_isCropping) {
 			_isCropping = false;
@@ -182,4 +208,7 @@
 	window.addEventListener("mouseup", stopCropping);
 	window.addEventListener("mousemove", onMouseMove);
 	window.addEventListener("paste", onPasteEvent);
+	window.addEventListener("mousedown", startCropping);
+
+	window.dismissPreview = dismissPreview;
 })();
