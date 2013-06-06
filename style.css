@@ -15,13 +15,13 @@ html, body {
 	top:20px;left:20px;right:20px;bottom:20px;
 	background: white;
 	overflow: auto;
-	border:1px dashed grey 
+	border:1px dotted lightgrey; 
 }
 
 #drop-area ol {
 	font-size: 24px;
 	font-family: Tahoma;
-	color: rgb(161, 196, 196);
+	color: lightgrey;
 	line-height: 64px;
 	margin-left : 42px;
 }
@@ -38,7 +38,7 @@ html, body {
 
 .cropshot-preview {
 	position: fixed;
-	
+
 	top: 50%;
 	left: 50%;
 	margin-left: -250px;
