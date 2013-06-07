@@ -72,18 +72,27 @@
 	};
 
 	var initializeCropData = function (event) {
-		var x = event.clientX, y = event.clientY;
-		x = Math.min(Math.max(20, x), 17 + Math.min(dropArea.offsetWidth, _canvas.width));
-		y = Math.min(Math.max(20, y), 17 + Math.min(dropArea.offsetHeight, _canvas.height));
+		var x = event.clientX, 
+			y = event.clientY, 
+			xy = __boundCoordsInCanvas(x, y);
 		_cropData = {};
-		_cropData.x1 = _cropData.x2 = x, _cropData.y1 = _cropData.y2 = y;
+		_cropData.x1 = _cropData.x2 = xy.x, _cropData.y1 = _cropData.y2 = xy.y;
 	}
 
 	var updateCropData = function (event) {
-		var x = event.clientX, y = event.clientY;
-		x = Math.min(Math.max(21, x), 17 + Math.min(dropArea.offsetWidth, _canvas.width));
-		y = Math.min(Math.max(21, y), 17 + Math.min(dropArea.offsetHeight, _canvas.height));
-		_cropData.x2 = x, _cropData.y2 = y;
+		var x = event.clientX, 
+			y = event.clientY, 
+			xy = __boundCoordsInCanvas(x, y);
+		_cropData.x2 = xy.x, _cropData.y2 = xy.y;
+	};
+	
+	var START_OFFSET = 21, END_OFFSET = 17;
+	var __boundCoordsInCanvas = function (x, y) {
+		var coords = {
+			'x' : Math.min(Math.max(START_OFFSET, x), END_OFFSET + Math.min(dropArea.offsetWidth, _canvas.width)),
+			'y' : Math.min(Math.max(START_OFFSET, y), END_OFFSET + Math.min(dropArea.offsetHeight, _canvas.height))
+		};
+		return coords;
 	};
 
 	var updateSelectionFromCropData = function (selection, cropData) {
