@@ -8,6 +8,7 @@
 
 html, body {
 	background : lightgrey;
+	cursor : crosshair;
 }
 
 #drop-area {
@@ -53,6 +54,7 @@ html, body {
 
 	box-shadow: 0 0 5px black;
 	background: white;
+	cursor : default;
 
 	z-index: 10000;
 }
@@ -101,4 +103,10 @@ html, body {
 
 #cropshot-preview-container.show {
 	display : block;
+}
+
+.selection-rectangle {
+	position:fixed;
+	border : 2px dotted red;
+	z-index:100005;
 }

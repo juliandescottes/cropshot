@@ -60,11 +60,7 @@
 
 	var createSelectionRectangle = function () {
 		var selectionRectangle = document.createElement("div");
-		selectionRectangle.style.cssText = [
-			"position:fixed",
-			"border : 2px dotted red",
-			"z-index:100005"
-		].join(";");
+		selectionRectangle.className = "selection-rectangle";
 		selectionRectangle.onmousemove = onMouseMove;
 		selectionRectangle.onmouseup = stopCropping;
 		document.body.appendChild(selectionRectangle);
@@ -88,6 +84,8 @@
 	
 	var START_OFFSET = 21, END_OFFSET = 17;
 	var __boundCoordsInCanvas = function (x, y) {
+		x = x - 3;
+		y = y - 3;
 		var coords = {
 			'x' : Math.min(Math.max(START_OFFSET, x), END_OFFSET + Math.min(dropArea.offsetWidth, _canvas.width)),
 			'y' : Math.min(Math.max(START_OFFSET, y), END_OFFSET + Math.min(dropArea.offsetHeight, _canvas.height))
@@ -195,7 +193,8 @@
 				_isCropping = true;
 				_selectionRectangle = createSelectionRectangle();
 				initializeCropData(event);
-				updateSelectionFromCropData(_selectionRectangle, _cropData);	
+				updateSelectionFromCropData(_selectionRectangle, _cropData);
+				event.preventDefault();	
 			}
 		}
 	};
