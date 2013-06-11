@@ -82,10 +82,8 @@
 		_cropData.x2 = xy.x, _cropData.y2 = xy.y;
 	};
 	
-	var START_OFFSET = 21, END_OFFSET = 17;
+	var START_OFFSET = 21, END_OFFSET = 21;
 	var __boundCoordsInCanvas = function (x, y) {
-		x = x - 3;
-		y = y - 3;
 		var coords = {
 			'x' : Math.min(Math.max(START_OFFSET, x), END_OFFSET + Math.min(dropArea.offsetWidth, _canvas.width)),
 			'y' : Math.min(Math.max(START_OFFSET, y), END_OFFSET + Math.min(dropArea.offsetHeight, _canvas.height))
@@ -95,10 +93,10 @@
 
 	var updateSelectionFromCropData = function (selection, cropData) {
 		var fixedData = fixRectData(cropData);
-		_selectionRectangle.style.top = fixedData.y1 + "px";
-		_selectionRectangle.style.left = fixedData.x1 + "px";
-		_selectionRectangle.style.height = fixedData.y2 - fixedData.y1 + "px";
-		_selectionRectangle.style.width = fixedData.x2 - fixedData.x1 + "px";
+		_selectionRectangle.style.borderTopWidth = fixedData.y1 + "px";
+		_selectionRectangle.style.borderLeftWidth = fixedData.x1 + "px";
+		_selectionRectangle.style.borderBottomWidth = (document.documentElement.clientHeight - fixedData.y2) + "px";
+		_selectionRectangle.style.borderRightWidth = (document.documentElement.clientWidth - fixedData.x2) + "px";
 	};
 
 	var fixRectData = function (rect) {
@@ -128,6 +126,7 @@
 				_canvas = createCanvasFromDataUrl(result);
 				dropArea.innerHTML = "";
 				dropArea.appendChild(_canvas);
+				document.body.classList.add("croppable");
 			})
 		} else {
 			console.log("Your clipboard doesn't contain an image :(");
@@ -144,6 +143,7 @@
 	var dismissPreview = function () {
 		previewContainer.classList.remove("show");
 		previewContainer.innerHTML = "";
+		document.body.classList.add("croppable");
 	};
 
 	var onSaveCompleted = function (result) {
@@ -151,6 +151,7 @@
 			var src = SERVICE_URL + "img/" + result.responseText;
 			previewContainer.innerHTML = __getTemplate("cropshot-preview").replace(/{{src}}/g, src);
 			previewContainer.classList.add("show");
+			document.body.classList.remove("croppable");
 		} else {
 			console.log("Couldn't save image : " + result.error);
 		}
@@ -178,11 +179,12 @@
 	};
 
 	var calculateAbsoluteCropData = function (cropData, container) {
+		var fixedData = fixRectData(cropData);
 		var xOffset = container.scrollLeft - (container.offsetLeft + 1);
 		var yOffset = container.scrollTop - (container.offsetTop + 1);
 		var absoluteData = {
-			x1 : cropData.x1 + xOffset, x2 : cropData.x2 + xOffset,
-			y1 : cropData.y1 + yOffset, y2 : cropData.y2 + yOffset 
+			x1 : fixedData.x1 + xOffset, x2 : fixedData.x2 - 4 + xOffset,
+			y1 : fixedData.y1 + yOffset, y2 : fixedData.y2 - 4 + yOffset 
 		};
 		return absoluteData;
 	};

@@ -8,13 +8,16 @@
 
 html, body {
 	background : lightgrey;
+}
+
+body.croppable {
 	cursor : crosshair;
 }
 
 #drop-area {
 	position : absolute;
 	top:20px;left:20px;right:20px;bottom:20px;
-	background: white;
+	background: url('background.png');
 	overflow: auto;
 	border:1px dotted lightgrey; 
 }
@@ -105,8 +108,13 @@ html, body {
 	display : block;
 }
 
-.selection-rectangle {
-	position:fixed;
-	border : 2px dotted red;
-	z-index:100005;
+.selection-rectangle { 
+	top : 0;
+    left : 0;
+    right : 0;
+    bottom : 0;
+    position:fixed;
+	border-style: solid;
+	border-color : rgba(0,0,0,0.2);
+   	z-index:100005;
 }
