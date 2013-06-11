@@ -118,3 +118,21 @@ body.croppable {
 	border-color : rgba(0,0,0,0.2);
    	z-index:100005;
 }
+
+#mouse-tooltip {
+	position : fixed;
+	z-index : 12000;
+	background : grey;
+	color : white;
+	font-family : Helvetica;
+	font-size : 8pt;
+	border-radius : 3px;
+	padding : 3px;
+	display : none;
+	font-weight: bold;	
+	opacity: 0.8
+}
+
+#mouse-tooltip.tooltip-visible {
+	display : block;
+}

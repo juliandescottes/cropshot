@@ -1,6 +1,7 @@
 (function () {
 	var dropArea = document.getElementById("drop-area");
 	var previewContainer = document.getElementById("cropshot-preview-container");
+	var mouseHelper = document.getElementById("mouse-tooltip");
 	var _canvas = null, _isCropping = false, _selectionRectangle = null, _cropData = null;
 
 	var __templates = {};
@@ -127,6 +128,7 @@
 				dropArea.innerHTML = "";
 				dropArea.appendChild(_canvas);
 				document.body.classList.add("croppable");
+				mouseHelper.classList.add("tooltip-visible");
 			})
 		} else {
 			console.log("Your clipboard doesn't contain an image :(");
@@ -134,9 +136,19 @@
 	};
 
 	var onMouseMove = function (event) {
+		mouseHelper.style.top = (event.y + 10) + "px"
+		mouseHelper.style.left = (event.x + 10) + "px"
 		if(_isCropping) {
 			updateCropData(event);
 			updateSelectionFromCropData (_selectionRectangle, _cropData);
+			var fixedData = fixRectData(_cropData);
+
+			mouseHelper.innerHTML = (fixedData.x2 - fixedData.x1) + "x" + (fixedData.y2 - fixedData.y1)
+		} else if (_canvas !== null)	 {
+			var x = event.clientX, 
+			y = event.clientY, 
+			xy = __boundCoordsInCanvas(x, y);
+			mouseHelper.innerHTML = (xy.x-START_OFFSET) + ":" + (xy.y-START_OFFSET);
 		}
 	};
 
@@ -144,6 +156,7 @@
 		previewContainer.classList.remove("show");
 		previewContainer.innerHTML = "";
 		document.body.classList.add("croppable");
+		mouseHelper.classList.add("tooltip-visible");
 	};
 
 	var onSaveCompleted = function (result) {
@@ -152,6 +165,7 @@
 			previewContainer.innerHTML = __getTemplate("cropshot-preview").replace(/{{src}}/g, src);
 			previewContainer.classList.add("show");
 			document.body.classList.remove("croppable");
+			mouseHelper.classList.remove("tooltip-visible");
 		} else {
 			console.log("Couldn't save image : " + result.error);
 		}
