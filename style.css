@@ -115,7 +115,7 @@ body.croppable {
     bottom : 0;
     position:fixed;
 	border-style: solid;
-	border-color : rgba(0,0,0,0.2);
+	border-color : rgba(0,0,0,0.5);
    	z-index:100005;
 }
 
