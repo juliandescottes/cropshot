@@ -55,17 +55,31 @@
 		return canvas;
 	};
 
-	var hasImageToCrop = function () {
-		return _canvas != null;
+	var _createCanvas = function () {
+		return document.createElement("canvas");
 	};
 
 	var createSelectionRectangle = function () {
-		var selectionRectangle = document.createElement("div");
-		selectionRectangle.className = "selection-rectangle";
-		selectionRectangle.onmousemove = onMouseMove;
-		selectionRectangle.onmouseup = stopCropping;
-		document.body.appendChild(selectionRectangle);
-		return selectionRectangle;
+		var canvas = _createCanvas();
+		canvas.classList.add("canvas-overlay");
+		canvas.width = document.documentElement.clientWidth;
+		canvas.height = document.documentElement.clientHeight;
+		document.body.appendChild(canvas);
+		return canvas;	
+	};
+
+	var updateSelectionFromCropData = function (selection, cropData) {
+		var fixedData = fixRectData(cropData);
+		var context = _selectionRectangle.getContext("2d");
+		context.fillStyle = "#000000";
+		context.fillRect(0,0,document.documentElement.clientWidth, document.documentElement.clientHeight);
+		context.clearRect (
+			fixedData.x1, fixedData.y1, 
+			fixedData.x2 - fixedData.x1, fixedData.y2 - fixedData.y1);
+	};
+
+	var hasImageToCrop = function () {
+		return _canvas != null;
 	};
 
 	var initializeCropData = function (event) {
@@ -90,14 +104,6 @@
 			'y' : Math.min(Math.max(START_OFFSET, y), END_OFFSET + Math.min(dropArea.offsetHeight, _canvas.height))
 		};
 		return coords;
-	};
-
-	var updateSelectionFromCropData = function (selection, cropData) {
-		var fixedData = fixRectData(cropData);
-		_selectionRectangle.style.borderTopWidth = fixedData.y1 + "px";
-		_selectionRectangle.style.borderLeftWidth = fixedData.x1 + "px";
-		_selectionRectangle.style.borderBottomWidth = (document.documentElement.clientHeight - fixedData.y2) + "px";
-		_selectionRectangle.style.borderRightWidth = (document.documentElement.clientWidth - fixedData.x2) + "px";
 	};
 
 	var fixRectData = function (rect) {
@@ -128,7 +134,6 @@
 				dropArea.innerHTML = "";
 				dropArea.appendChild(_canvas);
 				document.body.classList.add("croppable");
-				mouseHelper.classList.add("tooltip-visible");
 			})
 		} else {
 			console.log("Your clipboard doesn't contain an image :(");
@@ -143,12 +148,7 @@
 			updateSelectionFromCropData (_selectionRectangle, _cropData);
 			var fixedData = fixRectData(_cropData);
 
-			mouseHelper.innerHTML = (fixedData.x2 - fixedData.x1) + "x" + (fixedData.y2 - fixedData.y1)
-		} else if (_canvas !== null)	 {
-			var x = event.clientX, 
-			y = event.clientY, 
-			xy = __boundCoordsInCanvas(x, y);
-			mouseHelper.innerHTML = (xy.x-START_OFFSET) + ":" + (xy.y-START_OFFSET);
+			mouseHelper.innerHTML = (2 + fixedData.x2 - fixedData.x1) + "x" + (2 + fixedData.y2 - fixedData.y1)
 		}
 	};
 
@@ -156,7 +156,6 @@
 		previewContainer.classList.remove("show");
 		previewContainer.innerHTML = "";
 		document.body.classList.add("croppable");
-		mouseHelper.classList.add("tooltip-visible");
 	};
 
 	var onSaveCompleted = function (result) {
@@ -165,7 +164,6 @@
 			previewContainer.innerHTML = __getTemplate("cropshot-preview").replace(/{{src}}/g, src);
 			previewContainer.classList.add("show");
 			document.body.classList.remove("croppable");
-			mouseHelper.classList.remove("tooltip-visible");
 		} else {
 			console.log("Couldn't save image : " + result.error);
 		}
@@ -209,6 +207,7 @@
 				_isCropping = true;
 				_selectionRectangle = createSelectionRectangle();
 				initializeCropData(event);
+				mouseHelper.classList.add("tooltip-visible");
 				updateSelectionFromCropData(_selectionRectangle, _cropData);
 				event.preventDefault();	
 			}
@@ -225,6 +224,8 @@
 		if(_isCropping) {
 			_isCropping = false;
 			var absoluteData = calculateAbsoluteCropData(_cropData, _canvas.parentNode);
+			
+			mouseHelper.classList.remove("tooltip-visible");
 			cropImageAndUpload(_canvas, absoluteData, onSaveCompleted);
 		}
 	};
