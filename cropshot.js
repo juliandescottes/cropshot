@@ -232,7 +232,7 @@
 	};
 
 	var onDropAreaMousedown = function (event) {
-		if (event.target == dropArea) {
+		if (_isLeftButton(event) && event.target == dropArea) {
 			// if the target is exactly the drop area, the user is using the scrollbars, stop bubbling
 			event.stopPropagation()
 		}
