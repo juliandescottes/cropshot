@@ -173,7 +173,7 @@
 		_selectionRectangle.parentNode.removeChild(_selectionRectangle);
 	};
 
-	var SERVICE_URL = "http://screenletstore.appspot.com/";
+	var SERVICE_URL = "http://bite.appspot.com/";
 	var cropImageAndUpload = function (canvas, cropData, callback) {
 		try {
 			// crop canvas
@@ -232,6 +232,7 @@
 	window.addEventListener("mouseup", stopCropping);
 	window.addEventListener("mousemove", onMouseMove);
 	window.addEventListener("paste", onPasteEvent);
+	dropArea.addEventListener("mousedown", function (e) {if (e.target == dropArea) e.stopPropagation()});
 	window.addEventListener("mousedown", startCropping);
 
 	window.dismissPreview = dismissPreview;
