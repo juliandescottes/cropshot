@@ -116,7 +116,7 @@ body.croppable {
     position:fixed;
 	border-style: solid;
 	border-color : rgba(0,0,0,0.5);
-   	z-index:100005;
+   	z-index:10005;
 }
 
 #mouse-tooltip {
@@ -130,7 +130,7 @@ body.croppable {
 	padding : 3px;
 	display : none;
 	font-weight: bold;	
-	opacity: 0.8
+	opacity: 0.8;
 }
 
 #mouse-tooltip.tooltip-visible {
