@@ -1,4 +1,17 @@
 (function () {
+	/*******UTILS************/
+	var _isLeftButton = function (event) {
+		return event.button == 0;
+	};
+
+	var _isAncestor = function (element, child) {
+		var ancestor = child;
+		while (ancestor && (ancestor != element) && (ancestor = ancestor.parentNode)) {}
+		return ancestor == element;
+	}
+
+	/*******CROPSHOT********/
+
 	var dropArea = document.getElementById("drop-area");
 	var previewContainer = document.getElementById("cropshot-preview-container");
 	var mouseHelper = document.getElementById("mouse-tooltip");
@@ -171,7 +184,7 @@
 		_selectionRectangle.parentNode.removeChild(_selectionRectangle);
 	};
 
-	var SERVICE_URL = "http://bite.appspot.com/";
+	var SERVICE_URL = "http://screenletstore.appspot.com/";
 	var cropImageAndUpload = function (canvas, cropData, callback) {
 		try {
 			// crop canvas
@@ -201,8 +214,12 @@
 		return absoluteData;
 	};
 
+	var _isInPreviewPopup = function (event) {
+		return _isAncestor(previewContainer, event.target);
+	};
+
 	var startCropping = function (event) {
-		if (!isAncestor(previewContainer, event.target)) {
+		if (_isLeftButton(event) && !_isInPreviewPopup(event)) {
 			if (_canvas !== null) {
 				_isCropping = true;
 				_selectionRectangle = createSelectionRectangle();
@@ -214,11 +231,12 @@
 		}
 	};
 
-	var isAncestor = function (element, child) {
-		var ancestor = child;
-		while (ancestor && (ancestor != element) && (ancestor = ancestor.parentNode)) {}
-		return ancestor == element;
-	}
+	var onDropAreaMousedown = function (event) {
+		if (event.target == dropArea) {
+			// if the target is exactly the drop area, the user is using the scrollbars, stop bubbling
+			event.stopPropagation()
+		}
+	};
 
 	var stopCropping = function (event) {
 		if(_isCropping) {
@@ -233,7 +251,7 @@
 	window.addEventListener("mouseup", stopCropping);
 	window.addEventListener("mousemove", onMouseMove);
 	window.addEventListener("paste", onPasteEvent);
-	dropArea.addEventListener("mousedown", function (e) {if (e.target == dropArea) e.stopPropagation()});
+	dropArea.addEventListener("mousedown", onDropAreaMousedown);
 	window.addEventListener("mousedown", startCropping);
 
 	window.dismissPreview = dismissPreview;
