@@ -8,9 +8,10 @@
 
 html, body {
 	background : lightgrey;
+	cursor : crosshair;
 }
 
-body.croppable {
+body.croppable, #drop-area canvas {
 	cursor : crosshair;
 }
 
@@ -20,6 +21,7 @@ body.croppable {
 	background: url('background.png');
 	overflow: auto;
 	border:1px dotted lightgrey; 
+	cursor : default;
 }
 
 #drop-area ol {
@@ -108,24 +110,15 @@ body.croppable {
 	display : block;
 }
 
-.drop-container {
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	position: fixed;
-	z-index: 10;
-}
-
 .selection-rectangle { 
 	top : 0;
-    left : 0;
-    right : 0;
-    bottom : 0;
-    position:fixed;
+  left : 0;
+  right : 0;
+  bottom : 0;
+  position:fixed;
 	border-style: solid;
 	border-color : rgba(0,0,0,0.5);
-   	z-index:10005;
+  z-index:10005;
 }
 
 #mouse-tooltip {
@@ -148,9 +141,9 @@ body.croppable {
 
 .canvas-overlay {
 	top : 0;
-    left : 0;
-    right : 0;
-    bottom : 0;
-    position:fixed;
-    opacity : 0.5;
+  left : 0;
+  right : 0;
+  bottom : 0;
+  position:fixed;
+  opacity : 0.5;
 }
