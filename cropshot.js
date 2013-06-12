@@ -128,7 +128,6 @@
 				dropArea.innerHTML = "";
 				dropArea.appendChild(_canvas);
 				document.body.classList.add("croppable");
-				mouseHelper.classList.add("tooltip-visible");
 			})
 		} else {
 			console.log("Your clipboard doesn't contain an image :(");
@@ -156,7 +155,6 @@
 		previewContainer.classList.remove("show");
 		previewContainer.innerHTML = "";
 		document.body.classList.add("croppable");
-		mouseHelper.classList.add("tooltip-visible");
 	};
 
 	var onSaveCompleted = function (result) {
@@ -165,7 +163,6 @@
 			previewContainer.innerHTML = __getTemplate("cropshot-preview").replace(/{{src}}/g, src);
 			previewContainer.classList.add("show");
 			document.body.classList.remove("croppable");
-			mouseHelper.classList.remove("tooltip-visible");
 		} else {
 			console.log("Couldn't save image : " + result.error);
 		}
@@ -209,6 +206,7 @@
 				_isCropping = true;
 				_selectionRectangle = createSelectionRectangle();
 				initializeCropData(event);
+				mouseHelper.classList.add("tooltip-visible");
 				updateSelectionFromCropData(_selectionRectangle, _cropData);
 				event.preventDefault();	
 			}
@@ -225,6 +223,8 @@
 		if(_isCropping) {
 			_isCropping = false;
 			var absoluteData = calculateAbsoluteCropData(_cropData, _canvas.parentNode);
+			
+			mouseHelper.classList.remove("tooltip-visible");
 			cropImageAndUpload(_canvas, absoluteData, onSaveCompleted);
 		}
 	};
