@@ -136,3 +136,12 @@ body.croppable {
 #mouse-tooltip.tooltip-visible {
 	display : block;
 }
+
+.canvas-overlay {
+	top : 0;
+    left : 0;
+    right : 0;
+    bottom : 0;
+    position:fixed;
+    opacity : 0.5;
+}
