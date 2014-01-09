@@ -11,7 +11,8 @@
 		<div class="mask"></div>
 		<div class="cropshot-preview">
 			<div class="cropshot-preview-line cropshot-preview-title">Your cropshot has been successfully saved !</div>
-			<img class="cropshot-preview-image cropshot-preview-line" src='{{src}}'/>
+			<img class="cropshot-preview-image cropshot-preview-line" src='{{secure_src}}'/>
+	        <a class="cropshot-preview-line" href='{{secure_src}}'>{{secure_src}}</a>
 	        <a class="cropshot-preview-line" href='{{src}}'>{{src}}</a>
 	        <div class="cropshot-preview-button" onclick="dismissPreview()">Close</div>
 		</div>
