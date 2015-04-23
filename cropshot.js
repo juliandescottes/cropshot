@@ -188,16 +188,16 @@
 
   var getCanvasImageData = function (canvas) {
     var pngImageData = canvas.toDataURL("image/png");
-    // 400 chars in base64 ~= 300kb (reasonable file size)
-    if (pngImageData < 400) {
+    // 400 000 chars in base64 ~= 300kb (reasonable file size)
+    if (pngImageData.length < 400000) {
       return pngImageData;
     } else {
-      // 1300 chars in base64 ~= 1MB (appengine size limit)
-      return getJpgImageData(canvas, 1300)
+      // 1 300 000 chars in base64 ~= 1MB (appengine size limit)
+      return getJpgImageData(canvas, 1300000);
     }
   };
-  
-  var getJpgImage = function (canvas, maxSize) {
+
+  var getJpgImageData = function (canvas, maxSize) {
     var quality = 0.9;
     var jpgImageData = canvas.toDataURL("image/jpeg", quality);
     // Decrease quality to match maxSize requirement
