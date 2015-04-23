@@ -188,12 +188,27 @@
 
   var getCanvasImageData = function (canvas) {
     var pngImageData = canvas.toDataURL("image/png");
-    if (pngImageData < 400)
-    var jpgImageData = canvas.toDataURL("image/jpeg", 0.9);
-    if (jpgImageData.length < pngImageData.length) {
-      return jpgImageData.replace("image/jpeg", "image/jpg");
-    } else {
+    // 400 chars in base64 ~= 300kb (reasonable file size)
+    if (pngImageData < 400) {
       return pngImageData;
+    } else {
+      // 1300 chars in base64 ~= 1MB (appengine size limit)
+      return getJpgImageData(canvas, 1300)
+    }
+  };
+  
+  var getJpgImage = function (canvas, maxSize) {
+    var quality = 0.9;
+    var jpgImageData = canvas.toDataURL("image/jpeg", quality);
+    // Decrease quality to match maxSize requirement
+    while (jpgImageData.length > maxSize && quality > 0.1) {
+      quality -= 0.05;
+      jpgImageData = canvas.toDataURL("image/jpeg", quality);
+    }
+    if (jpgImageData.length > maxSize) {
+      alert('Image too big')
+    } else {
+      return jpgImageData.replace("image/jpeg", "image/jpg");
     }
   };
 
