@@ -188,6 +188,7 @@
 
   var getCanvasImageData = function (canvas) {
     var pngImageData = canvas.toDataURL("image/png");
+    if (pngImageData < 400)
     var jpgImageData = canvas.toDataURL("image/jpeg", 0.9);
     if (jpgImageData.length < pngImageData.length) {
       return jpgImageData.replace("image/jpeg", "image/jpg");
