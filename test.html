@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+    <form>
+        <a id="to-copy" href="asdasd">Some text to copy</a>
+        <button type="button">Copy</button>
+        <script type="text/javascript">
+              window.copyToClipboard = function (element) {
+    // document.querySelector('#drop-area').classList.remove('unselectable');
+    window.getSelection().removeAllRanges();
+
+    var range = document.createRange();
+    var span = document.createElement('span');
+    document.body.appendChild(span);
+    span.innerText = 'WTF : ' + (new Date());
+
+    range.selectNode(span);
+    window.getSelection().addRange(range);
+
+    var successful = false;
+    try {
+        // Now that we've selected the anchor text, execute the copy command
+        successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Copy command was ' + msg);
+    } catch(err) {
+        console.log('Oops, unable to copy');
+    } finally {
+      // Remove the selections - NOTE: Should use
+      // removeRange(range) when it is supported
+      window.getSelection().removeAllRanges();
+      document.body.removeChild(span);
+      // document.querySelector('#drop-area').classList.add('unselectable');
+    }
+
+    return successful;
+  };
+  copyToClipboard()
+        </script>
+    </form>
+    </body>
+</html>
