@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Test</title>
+        <title></title>    
     </head>
     <body>
-    <form>
-        <a id="to-copy" href="asdasd">Some text to copy</a>
-        <button type="button">Copy</button>
+        <a id="to-copy" href="asdasd">Some text to copy</a> 
         <script type="text/javascript">
               window.copyToClipboard = function (element) {
     // document.querySelector('#drop-area').classList.remove('unselectable');
@@ -15,7 +13,7 @@
     var range = document.createRange();
     var span = document.createElement('span');
     document.body.appendChild(span);
-    span.innerText = 'WTF : ' + (new Date());
+    span.innerText = 'Crotte de chiotte : ' + (new Date());
 
     range.selectNode(span);
     window.getSelection().addRange(range);
@@ -38,8 +36,7 @@
 
     return successful;
   };
-  copyToClipboard()
+  window.setTimeout(copyToClipboard(), 100);
         </script>
-    </form>
     </body>
-</html>
+</html> 
