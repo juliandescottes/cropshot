@@ -54,15 +54,24 @@
     reader.readAsDataURL(blob);
   };
 
+  var scaleDownRetina = function () {
+    return !!document.getElementById("noretina").checked;
+  };
+
   var createCanvasFromDataUrl = function (dataUrl) {
     var image = new Image(),
       canvas = document.createElement("canvas"),
       context = canvas.getContext("2d");
     image.onload = function () {
       var w = image.width, h = image.height;
-      canvas.width = w;
-        canvas.height = h;
-      context.drawImage(image, 0,0,w,h,0,0,w,h);
+
+      // Scale down by the pixel density to get rid of the retina zoom...
+      ratio = scaleDownRetina() ? 1 / window.devicePixelRatio : 1;
+      canvas.width = w * ratio;
+      canvas.height = h * ratio;
+      context.scale(ratio, ratio);
+      context.drawImage(image, 0, 0, w, h, 0, 0, w, h);
+
     };
     image.src = dataUrl;
 
