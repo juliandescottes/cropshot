@@ -221,7 +221,7 @@
     }
   };
 
-  var SERVICE_URL = "http://screenletstore.appspot.com/";
+  var SERVICE_URL = "https://screenletstore.appspot.com/";
   var SECURE_SERVICE_URL = "https://screenletstore.appspot.com/";
   var cropImageAndUpload = function (canvas, cropData, callback) {
     try {
