@@ -80,12 +80,14 @@ body.croppable, #drop-area canvas {
   margin-bottom : 10px;
 }
 
-.cropshot-preview-button {
-  height: 30px;
-  line-height: 30px;
-  width: 80px;
-  float:right;
+.cropshot-preview-actions {
+  display: flex;
+  justify-content: center;
+}
 
+.cropshot-preview-actions button {
+  height: 35px;
+  margin: 0 5px;
   border: 1px solid rgb(100,100,100);
   border-radius: 1px;
 
@@ -98,7 +100,7 @@ body.croppable, #drop-area canvas {
   cursor: pointer;
 }
 
-.cropshot-preview-button:hover {
+.cropshot-preview-actions button:hover {
   background-color: rgb(140,140,140);
 }
 

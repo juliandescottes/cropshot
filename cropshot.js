@@ -175,6 +175,20 @@
     }
   };
 
+  var copyToClipboard = function(secure_src) {
+    try {
+      var input = document.createElement("input");
+      input.value = src;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    } catch(err) {
+      return;
+    }
+    dismissPreview();
+  }
+
   var dismissPreview = function () {
     previewContainer.classList.remove("show");
     previewContainer.innerHTML = "";
@@ -293,4 +307,5 @@
   window.addEventListener("mousedown", startCropping);
 
   window.dismissPreview = dismissPreview;
+  window.copyToClipboard = copyToClipboard;
 })();
