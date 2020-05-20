@@ -178,7 +178,7 @@
   var copyToClipboard = function(secure_src) {
     try {
       var input = document.createElement("input");
-      input.value = src;
+      input.value = secure_src;
       document.body.appendChild(input);
       input.select();
       document.execCommand('copy');
